@@ -35,7 +35,11 @@ func normalizeMySQLURL(u *url.URL) string {
 	normalizedURL.RawQuery = query.Encode()
 
 	str := normalizedURL.String()
-	return strings.TrimLeft(str, "/")
+
+	/* MySQL needs the password without escaped characters */
+	unescaped, _ := url.QueryUnescape(str)
+
+	return strings.TrimLeft(unescaped, "/")
 }
 
 // Open creates a new database connection
